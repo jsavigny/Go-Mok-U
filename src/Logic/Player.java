@@ -41,7 +41,7 @@ public class Player {
     public Player(String name, int id) {
         this.name = name;
         setID(id);
-        setShape(Board.NOPLAYER);
+        //setShape(Board.NOPLAYER);
     }
 
     public int getID() {
@@ -74,10 +74,10 @@ public class Player {
      * @throws IllegalArgumentException
      */
     public void setShape(int shape) throws IllegalArgumentException {
-        if (shape != Board.PLAYER1 && shape != Board.PLAYER2
+        /*if (shape != Board.PLAYER1 && shape != Board.PLAYER2
                 && shape != Board.NOPLAYER) {
             throw new IllegalArgumentException("Player cannot be " + shape);
-        }
+        }*/
         this.shape = shape;
     }
 
@@ -87,7 +87,7 @@ public class Player {
      * @return a string representing the shape of the player
      */
     public String getshapeName() {
-        if (shape == Board.PLAYER1) {
+        /*if (shape == Board.PLAYER1) {
             return "O";
         }
         else if (shape == Board.PLAYER2) {
@@ -98,7 +98,7 @@ public class Player {
         }
         else if (shape == Board.PLAYER4) {
             return "#";
-        }
+        }*/
         return "None";
     }
 

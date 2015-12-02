@@ -1,0 +1,16 @@
+#boardPane{
+	-fx-background-color: white;
+	-fx-background-size: 768 768;
+}
+
+#backgroundPane{
+	-fx-background-color: silver;
+	-fx-background-size: 1366 768;
+}
+
+#boardGridPane {
+}
+
+.cellPane{
+
+}
