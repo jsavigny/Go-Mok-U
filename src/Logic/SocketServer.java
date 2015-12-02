@@ -1,5 +1,3 @@
-package Logic;
-
 import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -11,7 +9,7 @@ public class SocketServer extends Thread
     // The client socket.
     private static Socket clientSocket = null;
     // This chat server can accept up to maxClientsCount clients' connections.
-    private static final int maxClientsCount = 10;
+    private static final int maxClientsCount = 100;
     private static final clientThread[] threads = new clientThread[maxClientsCount];
     public SocketServer(int port) throws IOException
     {
@@ -59,13 +57,23 @@ class clientThread extends Thread {
         user.add(name);
     }
     public void createRoom(String playerName, String roomName){
-        selector = new ArrayList<String>();
-        selector.add(roomName);
-        selector.add(playerName);
-        room.add(selector);
+        int idx = -1;
+        boolean found = false;
+        for (int i=0;i<room.size();i++){
+            found = room.get(i).contains(roomName);
+            if( found == true){
+                idx = i;
+            }
+        }
+        if(idx == -1) {
+            selector = new ArrayList<String>();
+            selector.add(roomName);
+            selector.add(playerName);
+            room.add(selector);
+        }
     }
     public void joinRoom(String playerName, String roomName){
-        int idx = 0;
+        int idx = -1;
         boolean found = false;
         for (int i=0;i<room.size();i++){
             found = room.get(i).contains(roomName);
@@ -75,8 +83,54 @@ class clientThread extends Thread {
             }
         }
         System.out.println(idx);
-        if (found == true) {
+        if(idx != -1) {
+            System.out.println("MASUK ROOM");
             room.get(idx).add(playerName);
+        }
+    }
+    public int countPlayer(String roomName){
+        int idx = -1;
+        boolean found = false;
+        for (int i=0;i<room.size();i++){
+            found = room.get(i).contains(roomName);
+            if( found == true){
+                idx = i;
+            }
+        }
+        int count = room.get(idx).size();
+        return count-1;
+    }
+    public void Play(String roomName){
+        int idx = -1;
+        boolean found = false;
+        for (int i=0;i<room.size();i++){
+            found = room.get(i).contains(roomName);
+            if( found == true){
+                idx = i;
+            }
+        }
+        String race;
+        for (int j=1;j<countPlayer(roomName)+1;j++){
+            if(j == 1) {
+                race = "O";
+                System.out.println(room.get(idx).get(j) + " NOW PLAYING "+race);
+            }
+            else if(j == 2) {
+                race = "X";
+                System.out.println(room.get(idx).get(j) + " NOW PLAYING "+race);
+            }
+            else if(j == 3) {
+                race = "^";
+                System.out.println(room.get(idx).get(j) + " NOW PLAYING "+race);
+            }
+            else if(j == 4) {
+                race = "$";
+                System.out.println(room.get(idx).get(j) + " NOW PLAYING "+race);
+            }
+            else if(j == 5) {
+                race = "#";
+                System.out.println(room.get(idx).get(j) + " NOW PLAYING "+race);
+            }
         }
     }
     public void run() {
@@ -88,32 +142,53 @@ class clientThread extends Thread {
                 DataInputStream in = new DataInputStream(clientSocket.getInputStream());
                 DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
                 //Terima variable dari client
-                //ObjectInputStream ins = new ObjectInputStream(clientSocket.getInputStream());
+                ObjectInputStream ins = new ObjectInputStream(clientSocket.getInputStream());
                 //Kirim variable ke client
-                //ObjectOutputStream outs = new ObjectOutputStream(clientSocket.getOutputStream());
+                ObjectOutputStream outs = new ObjectOutputStream(clientSocket.getOutputStream());
                 String nama = in.readUTF();
                 System.out.println("Berhasil Login " + nama);
                 login(nama);
                 System.out.println(user);
                 out.writeUTF("Welcome " + nama + " Lets Gomoku!");
                 int pilihan = in.readInt();
-                System.out.println("Pilihan Client : "+pilihan);
+                System.out.println("Pilihan Client : " + pilihan);
                 if (pilihan == 1){
                     String namacreator = in.readUTF();
                     String namaroom = in.readUTF();
                     System.out.println("Nama Creator :"+namacreator);
-                    System.out.println("Nama Room :"+namaroom);
+                    System.out.println("Nama Room :" + namaroom);
                     createRoom(namacreator, namaroom);
                     System.out.println(room);
+                    out.writeInt(countPlayer(namaroom));
+                    String play = in.readUTF();
+                    if((play.equals("y") || play.equals("Y")) && countPlayer(namaroom) >= 3){
+                        Play(namaroom);
+                        out.writeUTF("Play");
+                    }
+                    else{
+                        System.out.println("Masuk No");
+                        out.writeUTF("No");
+                    }
                 }
                 else if (pilihan == 2){
                     String namajoin = in.readUTF();
                     String namaroom = in.readUTF();
                     System.out.println("Nama Joiner :"+namajoin);
-                    System.out.println("Nama Room :"+namaroom);
+                    System.out.println("Nama Room :" + namaroom);
                     joinRoom(namajoin, namaroom);
                     System.out.println(room);
+                    out.writeInt(countPlayer(namaroom));
+                    String play = in.readUTF();
+                    if((play.equals("y") || play.equals("Y")) && countPlayer(namaroom) >= 3){
+                        Play(namaroom);
+                        out.writeUTF("Play");
+                    }
+                    else{
+                        System.out.println("Masuk No");
+                        out.writeUTF("No");
+                    }
                 }
+
                 clientSocket.close();
             }catch(SocketTimeoutException s)
             {
