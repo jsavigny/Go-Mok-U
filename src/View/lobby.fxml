@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0" prefWidth="320.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.LobbyController">
+   <children>
+      <TabPane prefHeight="240.0" prefWidth="320.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab fx:id="pilJoin" text="Join Room">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <ScrollPane layoutX="15.0" layoutY="6.0" prefHeight="157.0" prefWidth="293.0">
+                           <content>
+                              <ListView fx:id="roomList" prefHeight="155.0" prefWidth="291.0" />
+                           </content>
+                        </ScrollPane>
+                        <Button fx:id="joinRoomButton" layoutX="143.0" layoutY="172.0" mnemonicParsing="false" text="Join" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab fx:id="pilCreate" text="Create Room">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Button fx:id="createRoomButton" layoutX="135.0" layoutY="172.0" mnemonicParsing="false" text="Create" />
+                        <TextField fx:id="roomName" layoutX="86.0" layoutY="93.0" />
+                        <Text layoutX="127.0" layoutY="78.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Room Name" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>

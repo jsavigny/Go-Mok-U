@@ -1,3 +1,5 @@
+package Logic;
+
 import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -86,9 +88,9 @@ class clientThread extends Thread {
                 DataInputStream in = new DataInputStream(clientSocket.getInputStream());
                 DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
                 //Terima variable dari client
-                ObjectInputStream ins = new ObjectInputStream(clientSocket.getInputStream());
+                //ObjectInputStream ins = new ObjectInputStream(clientSocket.getInputStream());
                 //Kirim variable ke client
-                ObjectOutputStream outs = new ObjectOutputStream(clientSocket.getOutputStream());
+                //ObjectOutputStream outs = new ObjectOutputStream(clientSocket.getOutputStream());
                 String nama = in.readUTF();
                 System.out.println("Berhasil Login " + nama);
                 login(nama);

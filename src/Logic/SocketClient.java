@@ -1,3 +1,4 @@
+package Logic;
 /**
  * Created by user on 01/12/2015.
  */
@@ -20,8 +21,8 @@ public class SocketClient
             DataOutputStream out = new DataOutputStream(outToServer);
             InputStream inFromServer = client.getInputStream();
             DataInputStream in = new DataInputStream(inFromServer);
-            ObjectOutputStream outs = new ObjectOutputStream(outToServer);
-            ObjectInputStream ins = new ObjectInputStream(inFromServer);
+            //ObjectOutputStream outs = new ObjectOutputStream(outToServer);
+            //ObjectInputStream ins = new ObjectInputStream(inFromServer);
             System.out.println("Silakan Login terlebih dahulu");
             Scanner scanner = new Scanner(System.in);
             String name = scanner.nextLine();

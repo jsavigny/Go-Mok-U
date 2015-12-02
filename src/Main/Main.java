@@ -7,6 +7,9 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import java.io.*;
+import java.net.Socket;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,17 +19,20 @@ import java.util.logging.Logger;
 public class Main extends Application {
 
     public static void main(String[] args) {
+
         Application.launch(Main.class, (java.lang.String[])null);
     }
 
     @Override
     public void start(Stage primaryStage) {
         try {
-            Parent page = FXMLLoader.load(Main.class.getResource("../View/landing.fxml"));
-            Scene scene = new Scene(page);
+            Parent landing = FXMLLoader.load(Main.class.getResource("../View/landing.fxml"));
+            Scene scene = new Scene(landing);
             primaryStage.setScene(scene);
             primaryStage.setTitle("Room");
             primaryStage.show();
+
+
         } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
