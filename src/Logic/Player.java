@@ -41,7 +41,7 @@ public class Player {
     public Player(String name, int id) {
         this.name = name;
         setID(id);
-        //setShape(Board.NOPLAYER);
+        setShape(Board.NOPLAYER);
     }
 
     public int getID() {
@@ -74,7 +74,6 @@ public class Player {
      * @throws IllegalArgumentException
      */
     public void setShape(int shape) throws IllegalArgumentException {
-
         if (shape != Board.PLAYER1 && shape != Board.PLAYER2 && shape != Board.PLAYER3 && shape != Board.PLAYER4
                 && shape != Board.NOPLAYER) {
             throw new IllegalArgumentException("Invalid Shape");
