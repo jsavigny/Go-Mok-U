@@ -49,7 +49,7 @@ public class Player {
     }
 
     public void setID(int id) {
-        if (id == 0 || id == 1 || id == 2) {
+        if (id == 0 || id == 1 || id == 2 || id == 3 || id == 4) {
             playerID = id;
         } else {
             throw new IllegalArgumentException("PlayerID set to unknown value "
@@ -74,9 +74,9 @@ public class Player {
      * @throws IllegalArgumentException
      */
     public void setShape(int shape) throws IllegalArgumentException {
-        if (shape != Board.PLAYER1 && shape != Board.PLAYER2
+        if (shape != Board.PLAYER1 && shape != Board.PLAYER2 && shape != Board.PLAYER3 && shape != Board.PLAYER4
                 && shape != Board.NOPLAYER) {
-            throw new IllegalArgumentException("Player cannot be " + shape);
+            throw new IllegalArgumentException("Invalid Shape");
         }
         this.shape = shape;
     }
@@ -86,7 +86,7 @@ public class Player {
      *
      * @return a string representing the shape of the player
      */
-    public String getshapeName() {
+    public String getShapeName() {
         if (shape == Board.PLAYER1) {
             return "O";
         }
