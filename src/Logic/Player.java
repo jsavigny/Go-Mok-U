@@ -74,17 +74,11 @@ public class Player {
      * @throws IllegalArgumentException
      */
     public void setShape(int shape) throws IllegalArgumentException {
-<<<<<<< HEAD
-        /*if (shape != Board.PLAYER1 && shape != Board.PLAYER2
-                && shape != Board.NOPLAYER) {
-            throw new IllegalArgumentException("Player cannot be " + shape);
-        }*/
-=======
+
         if (shape != Board.PLAYER1 && shape != Board.PLAYER2 && shape != Board.PLAYER3 && shape != Board.PLAYER4
                 && shape != Board.NOPLAYER) {
             throw new IllegalArgumentException("Invalid Shape");
         }
->>>>>>> origin/master
         this.shape = shape;
     }
 
@@ -93,13 +87,8 @@ public class Player {
      *
      * @return a string representing the shape of the player
      */
-<<<<<<< HEAD
-    public String getshapeName() {
-        /*if (shape == Board.PLAYER1) {
-=======
     public String getShapeName() {
         if (shape == Board.PLAYER1) {
->>>>>>> origin/master
             return "O";
         }
         else if (shape == Board.PLAYER2) {
@@ -110,7 +99,7 @@ public class Player {
         }
         else if (shape == Board.PLAYER4) {
             return "#";
-        }*/
+        }
         return "None";
     }
 

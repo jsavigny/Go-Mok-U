@@ -1,10 +1,10 @@
 #boardPane{
-	-fx-background-color: white;
+	-fx-background-color: saddlebrown;
 	-fx-background-size: 768 768;
 }
 
 #backgroundPane{
-	-fx-background-color: silver;
+	-fx-background-color: wheat;
 	-fx-background-size: 1366 768;
 }
 
@@ -13,4 +13,18 @@
 
 .cellPane{
 
+}
+
+.game-grid-cell {
+	-fx-background-color: black, sandybrown ;
+	-fx-background-insets: 0, 0 1 1 0 ;
+}
+.game-grid-cell.first-row {
+	-fx-background-insets: 0, 1 1 1 0 ;
+}
+.game-grid-cell.first-column {
+	-fx-background-insets: 0, 0 1 1 1 ;
+}
+.game-grid-cell.first-row.first-column {
+	-fx-background-insets: 0, 1 ;
 }

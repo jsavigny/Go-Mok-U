@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.paint.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="backgroundPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" stylesheets="gomoku.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.RoomController">
+<AnchorPane id="backgroundPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" stylesheets="@gomoku.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.RoomController">
    <children>
       <HBox layoutX="-67.0" layoutY="-2.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Pane prefHeight="70.0" prefWidth="299.0">
                <children>
+                  <Text fx:id="congratString" layoutX="84.0" layoutY="297.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Selamat, Player X Menang!" wrappingWidth="134.8115234375">
+                     <font>
+                        <Font name="Arial Bold" size="30.0" />
+                     </font>
+                  </Text>
                   <Text fx:id="turnString" layoutX="56.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player 2 Turn">
                      <font>
                         <Font name="Arial Bold" size="30.0" />
@@ -24,7 +30,7 @@
             </Pane>
             <Pane id="boardPane" prefHeight="768.0" prefWidth="768.0">
                <children>
-                  <GridPane id="boardGridPane" fx:id="board" gridLinesVisible="true" layoutX="24.0" layoutY="24.0">
+                  <GridPane id="boardGridPane" fx:id="board" layoutX="24.0" layoutY="24.0">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="36.0" prefWidth="36.0" />
                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="36.0" prefWidth="36.0" />
