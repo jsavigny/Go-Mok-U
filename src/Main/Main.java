@@ -22,7 +22,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            Parent page = FXMLLoader.load(Main.class.getResource("../View/room.fxml"));
+            Parent page = FXMLLoader.load(Main.class.getResource("../View/landing.fxml"));
             Scene scene = new Scene(page);
             primaryStage.setScene(scene);
             primaryStage.setTitle("Room");

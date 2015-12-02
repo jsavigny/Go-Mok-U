@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane fx:controller="Controller.LandingController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0" prefWidth="320.0" stylesheets="@gomoku.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane prefHeight="240.0" prefWidth="326.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <TextField fx:id="nickNameTextField" layoutX="81.0" layoutY="123.0" />
+            <Text layoutX="103.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Insert Your Nickname" />
+            <Button fx:id="submitNickname" layoutX="132.0" layoutY="164.0" mnemonicParsing="false" text="Submit" />
+            <Pane id="#landingTitle" prefHeight="72.0" prefWidth="320.0" style="-fx-background-color: tan;">
+               <children>
+                  <Text layoutX="108.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Go-Mok-U">
+                     <font>
+                        <Font size="22.0" />
+                     </font>
+                  </Text>
+               </children>
+            </Pane>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
