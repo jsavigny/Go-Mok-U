@@ -109,19 +109,20 @@ public class clientThread extends Thread {
                 DataInputStream in = new DataInputStream(clientSocket.getInputStream());
                 DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
                 //Terima variable dari client
-                ObjectInputStream ins = new ObjectInputStream(clientSocket.getInputStream());
+                //ObjectInputStream ins = new ObjectInputStream(clientSocket.getInputStream());
                 //Kirim variable ke client
-                ObjectOutputStream outs = new ObjectOutputStream(clientSocket.getOutputStream());
+                //ObjectOutputStream outs = new ObjectOutputStream(clientSocket.getOutputStream());
                 String nama = in.readUTF();
                 System.out.println("Berhasil Login " + nama);
                 login(nama);
                 System.out.println(user);
                 out.writeUTF("Welcome " + nama + " Lets Gomoku!");
-                int pilihan = in.readInt();
                 out.writeInt(room.size());
                 for(int i=0;i<room.size();i++){
                     out.writeUTF(room.get(i).get(0));
                 }
+
+                int pilihan = in.readInt();
                 System.out.println("Pilihan Client : " + pilihan);
                 if (pilihan == 1){
                     String namacreator = in.readUTF();

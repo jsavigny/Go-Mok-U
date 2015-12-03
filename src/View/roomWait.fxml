@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0" prefWidth="320.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.RoomWaitController">
+   <children>
+      <ScrollPane layoutX="17.0" layoutY="22.0" prefHeight="167.0" prefWidth="286.0">
+         <content>
+            <ListView fx:id="playerList" prefHeight="165.0" prefWidth="284.0" />
+         </content></ScrollPane>
+      <Button fx:id="playButton" layoutX="141.0" layoutY="201.0" mnemonicParsing="false" text="Play" />
+   </children>
+</AnchorPane>

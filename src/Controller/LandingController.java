@@ -44,8 +44,6 @@ public class LandingController implements Initializable {
                     stage.setScene(scene);
                     stage.show();
                     ((Node)(e.getSource())).getScene().getWindow().hide();
-
-
                 } catch (IOException exc) {
                     exc.printStackTrace();
                 }
