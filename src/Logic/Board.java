@@ -20,6 +20,7 @@ public class Board {
     public static final int PLAYER2 = 2;
     public static final int PLAYER3 = 3;
     public static final int PLAYER4 = 4;
+    public static final int PLAYER5 = 5;
 
     /** The structure containing the board data */
     protected int[] board;
@@ -106,7 +107,6 @@ public class Board {
                 done = false;
             }
         }
-
     }
 
     /** Empty constructor */

@@ -23,6 +23,7 @@ public class GomokuGame {
     private Player playerTwo;
     private Player playerThree;
     private Player playerFour;
+    private Player playerFive;
 
 
     private boolean gameOver;
@@ -101,7 +102,6 @@ public class GomokuGame {
 
     /**
      * Create a new game from a board
-     *
      * @param board
      */
     public GomokuGame(Board board, GomokuConfig config, boolean record) {
@@ -188,12 +188,9 @@ public class GomokuGame {
      * Place a piece and switch player turn
      *
      * @param x
-     *            the x location of the piece
      * @param y
-     *            the y location of the piece
      * @param player
-     *            the player placing the piece
-     * @return true if piece was placed
+     * @return
      */
     public PlacePieceGameAction placePiece(int x, int y, Player player,
             boolean waitForConfirm) throws IllegalActionException {
@@ -224,6 +221,8 @@ public class GomokuGame {
             return playerThree;
         if (piece == playerFour.getShape())
             return playerFour;
+        if (piece == playerFive.getShape())
+            return playerFive;
         return null;
     }
 
@@ -235,10 +234,14 @@ public class GomokuGame {
 
         if (playerID == Player.PLAYER1) {
             playerOne.setShape(shape);
-            playerTwo.setShape(otherShape);
         } else if (playerID == Player.PLAYER2) {
-            playerOne.setShape(otherShape);
             playerTwo.setShape(shape);
+        } else if (playerID == Player.PLAYER3) {
+            playerThree.setShape(shape);
+        } else if (playerID == Player.PLAYER4) {
+            playerFour.setShape(shape);
+        } else if (playerID == Player.PLAYER5) {
+            playerFive.setShape(shape);
         }
 
     }

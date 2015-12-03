@@ -12,6 +12,7 @@ public class Player {
     public static final int PLAYER2 = 2;
     public static final int PLAYER3 = 3;
     public static final int PLAYER4 = 4;
+    public static final int PLAYER5 = 5;
 
     /**
      * 0 = Spectator, or no player 1 = Player one 2 = Player two
@@ -49,11 +50,10 @@ public class Player {
     }
 
     public void setID(int id) {
-        if (id == 0 || id == 1 || id == 2 || id == 3 || id == 4) {
+        if (id == 0 || id == 1 || id == 2 || id == 3 || id == 4 || id == 5) {
             playerID = id;
         } else {
-            throw new IllegalArgumentException("PlayerID set to unknown value "
-                    + id);
+            throw new IllegalArgumentException("PlayerID set to unknown value " + id);
         }
     }
 
@@ -94,9 +94,12 @@ public class Player {
             return "X";
         }
         else if (shape == Board.PLAYER3) {
-            return "+";
+            return "^";
         }
         else if (shape == Board.PLAYER4) {
+            return "$";
+        }
+        else if (shape == Board.PLAYER5) {
             return "#";
         }
         return "None";
