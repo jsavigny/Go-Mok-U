@@ -1,87 +1,101 @@
-/**
- * Created by user on 01/12/2015.
- */
+
 package Logic;
-import java.net.*;
-import java.io.*;
-import java.util.Scanner;
-import java.util.concurrent.TimeoutException;
+import java.io.DataInputStream;
+import java.io.PrintStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
 
-public class SocketClient
-{
-    public static void main(String [] args)
-    {
-        String serverName = args[0];
-        int port = Integer.parseInt(args[1]);
-        try
-        {
-            System.out.println("Connecting to " + serverName + " on port " + port);
-            Socket client = new Socket(serverName, port);
-            client.setSoTimeout(10000000);
-            System.out.println("Just connected to " + client.getRemoteSocketAddress());
-            OutputStream outToServer = client.getOutputStream();
-            DataOutputStream out = new DataOutputStream(outToServer);
-            InputStream inFromServer = client.getInputStream();
-            DataInputStream in = new DataInputStream(inFromServer);
-            ObjectOutputStream outs = new ObjectOutputStream(outToServer);
-            ObjectInputStream ins = new ObjectInputStream(inFromServer);
-            System.out.println("Silakan Login terlebih dahulu");
-            Scanner scanner = new Scanner(System.in);
-            String name = scanner.nextLine();
-            out.writeUTF(name);
-            System.out.println(in.readUTF());
-            System.out.println("Masukan Pilihan mu " + name);
-            int pilihan = scanner.nextInt();
-            //Harus pindah baris setelah scan int
-            scanner.nextLine();
-            out.writeInt(pilihan);
-            int sizeRoom = in.readInt();
-            System.out.println("SIZE ROOM = "+sizeRoom);
-            String namaRoom;
-            for(int i=0;i<sizeRoom;i++){
-                namaRoom = in.readUTF();
-                System.out.println("NAMA ROOM = "+namaRoom);
-            }
-            //Pilihan 1 Create room
-            if (pilihan == 1){
-                String roomName = scanner.nextLine();
-                out.writeUTF(name);
-                out.writeUTF(roomName);
-                int countPlayer = in.readInt();
-                System.out.println("Jumlah orang room " + roomName + " = " + countPlayer);
-                System.out.println("Wanna Play Right Now? (Y/N)");
-                String play = scanner.nextLine();
-                out.writeUTF(play);
-                String statusplay = in.readUTF();
-                System.out.println(statusplay);
-                if (statusplay.equals("No")) {
-                        System.out.println("Harap Tunggu Jumlah Pemain < 3");
-                }
-                else System.out.println("Selamat Bermain");
-                //Game Start Here
-            }
-            //Pilihan 2 Join room
-            else if (pilihan == 2){
-                String roomName = scanner.nextLine();
-                out.writeUTF(name);
-                out.writeUTF(roomName);
-                int countPlayer = in.readInt();
-                System.out.println("Jumlah orang room " + roomName + " = " + countPlayer);
-                System.out.println("Wanna Play Right Now? (Y/N)");
-                String play = scanner.nextLine();
-                out.writeUTF(play);
-                String statusplay = in.readUTF();
-                System.out.println(statusplay);
-                if (statusplay.equals("No")) {
-                    System.out.println("Harap Tunggu Jumlah Pemain < 3");
-                }
-                else System.out.println("Selamat Bermain");
-            }
+public class SocketClient implements Runnable {
 
-            //client.close();
-        }catch(IOException e)
-        {
-            e.printStackTrace();
+    // The client socket
+    private static Socket clientSocket = null;
+    // The output stream
+    private static PrintStream os = null;
+    // The input stream
+    private static DataInputStream is = null;
+
+    private static BufferedReader inputLine = null;
+    private static boolean closed = false;
+
+    public static void main(String[] args) {
+
+        // The default port.
+        int portNumber = 2222;
+        // The default host.
+        String host = "localhost";
+
+        if (args.length < 2) {
+            System.out
+                    .println("Usage: java SocketClient <host> <portNumber>\n"
+                            + "Now using host=" + host + ", portNumber=" + portNumber);
+        } else {
+            host = args[0];
+            portNumber = Integer.valueOf(args[1]).intValue();
+        }
+
+    /*
+     * Open a socket on a given host and port. Open input and output streams.
+     */
+        try {
+            clientSocket = new Socket(host, portNumber);
+            inputLine = new BufferedReader(new InputStreamReader(System.in));
+            os = new PrintStream(clientSocket.getOutputStream());
+            is = new DataInputStream(clientSocket.getInputStream());
+        } catch (UnknownHostException e) {
+            System.err.println("Don't know about host " + host);
+        } catch (IOException e) {
+            System.err.println("Couldn't get I/O for the connection to the host "
+                    + host);
+        }
+
+    /*
+     * If everything has been initialized then we want to write some data to the
+     * socket we have opened a connection to on the port portNumber.
+     */
+        if (clientSocket != null && os != null && is != null) {
+            try {
+
+        /* Create a thread to read from the server. */
+                new Thread(new SocketClient()).start();
+                while (!closed) {
+                    os.println(inputLine.readLine().trim());
+                    os.println(inputLine.readLine().trim());
+                }
+        /*
+         * Close the output stream, close the input stream, close the socket.
+         */
+                os.close();
+                is.close();
+                clientSocket.close();
+            } catch (IOException e) {
+                System.err.println("IOException:  " + e);
+            }
+        }
+    }
+
+    /*
+     * Create a thread to read from the server. (non-Javadoc)
+     *
+     * @see java.lang.Runnable#run()
+     */
+    public void run() {
+    /*
+     * Keep on reading from the socket till we receive "Bye" from the
+     * server. Once we received that then we want to break.
+     */
+        String responseLine;
+        try {
+            while ((responseLine = is.readLine()) != null) {
+                System.out.println(responseLine);
+                if (responseLine.indexOf("*** Bye") != -1)
+                    break;
+            }
+            closed = true;
+        } catch (IOException e) {
+            System.err.println("IOException:  " + e);
         }
     }
 }
