@@ -118,6 +118,10 @@ public class clientThread extends Thread {
                 System.out.println(user);
                 out.writeUTF("Welcome " + nama + " Lets Gomoku!");
                 int pilihan = in.readInt();
+                out.writeInt(room.size());
+                for(int i=0;i<room.size();i++){
+                    out.writeUTF(room.get(i).get(0));
+                }
                 System.out.println("Pilihan Client : " + pilihan);
                 if (pilihan == 1){
                     String namacreator = in.readUTF();

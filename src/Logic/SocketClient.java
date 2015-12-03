@@ -30,11 +30,18 @@ public class SocketClient
             String name = scanner.nextLine();
             out.writeUTF(name);
             System.out.println(in.readUTF());
-            System.out.println("Masukan Pilihan mu "+name);
+            System.out.println("Masukan Pilihan mu " + name);
             int pilihan = scanner.nextInt();
             //Harus pindah baris setelah scan int
             scanner.nextLine();
             out.writeInt(pilihan);
+            int sizeRoom = in.readInt();
+            System.out.println("SIZE ROOM = "+sizeRoom);
+            String namaRoom;
+            for(int i=0;i<sizeRoom;i++){
+                namaRoom = in.readUTF();
+                System.out.println("NAMA ROOM = "+namaRoom);
+            }
             //Pilihan 1 Create room
             if (pilihan == 1){
                 String roomName = scanner.nextLine();
