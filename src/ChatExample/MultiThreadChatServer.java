@@ -1,3 +1,4 @@
+package ChatExample;
 
 import java.io.DataInputStream;
 import java.io.PrintStream;
@@ -25,7 +26,7 @@ public class MultiThreadChatServer {
         int portNumber = 2222;
         if (args.length < 1) {
             System.out
-                    .println("Usage: java MultiThreadChatServer <portNumber>\n"
+                    .println("Usage: java ChatExample.MultiThreadChatServer <portNumber>\n"
                             + "Now using port number=" + portNumber);
         } else {
             portNumber = Integer.valueOf(args[0]).intValue();
