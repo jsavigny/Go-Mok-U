@@ -87,12 +87,12 @@ class clientThread extends Thread {
     }
     public void displayRoom() throws IOException {
         for (int i = 0; i < maxClientsCount; i++) {
-            if (threads[i] != null && threads[i] != this) {
-                //threads[i].os.println("Room Size = "+roomsize);
-                threads[i].out.writeUTF("Room Size = " + roomsize);
+            if (threads[i] != null && threads[i] == this) {
+                threads[i].os.println("Room Size = "+roomsize);
+                //threads[i].out.writeUTF("Room Size = " + roomsize);
                 for(int j=0;j<roomsize;j++){
-                    //  threads[i].os.println("Room Tersedia = "+SocketServer.room.get(j).get(0));
-                    threads[i].out.writeUTF("Room Tersedia = " + SocketServer.room.get(j).get(0));
+                    threads[i].os.println("Room Tersedia = "+SocketServer.room.get(j).get(0));
+                    //threads[i].out.writeUTF("Room Tersedia = " + SocketServer.room.get(j).get(0));
                 }
             }
         }
@@ -107,33 +107,33 @@ class clientThread extends Thread {
             }
         }
         String race;
-        //for (int i = 0; i < maxClientsCount; i++) {
-        //if (threads[i] != null && threads[i] != this) {
-        for (int j = 1; j < countPlayer(roomName) + 1; j++) {
-            if (j == 1) {
-                race = "O";
-                System.out.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
-                //  threads[i].os.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
-            } else if (j == 2) {
-                race = "X";
-                System.out.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
-                //  threads[i].os.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
-            } else if (j == 3) {
-                race = "^";
-                System.out.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
-                //  threads[i].os.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
-            } else if (j == 4) {
-                race = "$";
-                System.out.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
-                //  threads[i].os.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
-            } else if (j == 5) {
-                race = "#";
-                System.out.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
-                // threads[i].os.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
+        for (int i = 0; i < maxClientsCount; i++) {
+            if (threads[i] != null && threads[i] == this) {
+                for (int j = 1; j < countPlayer(roomName) + 1; j++) {
+                    if (j == 1) {
+                        race = "O";
+                        System.out.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
+                        threads[i].os.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
+                    } else if (j == 2) {
+                        race = "X";
+                        System.out.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
+                        threads[i].os.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
+                    } else if (j == 3) {
+                        race = "^";
+                        System.out.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
+                        threads[i].os.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
+                    } else if (j == 4) {
+                        race = "$";
+                        System.out.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
+                        threads[i].os.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
+                    } else if (j == 5) {
+                        race = "#";
+                        System.out.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
+                        threads[i].os.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
+                    }
+                }
             }
         }
-        // }
-        //}
     }
 
     public void run() {
@@ -146,28 +146,27 @@ class clientThread extends Thread {
        */
             is = new DataInputStream(clientSocket.getInputStream());
             os = new PrintStream(clientSocket.getOutputStream());
-            out = new DataOutputStream(clientSocket.getOutputStream());
+            //out = new DataOutputStream(clientSocket.getOutputStream());
             os.println("Just Connected To " + clientSocket.getRemoteSocketAddress());
             //out.writeUTF("Just Connected To " + clientSocket.getRemoteSocketAddress());
             os.println("Silakan Login Terlebih Dahulu");
             //out.writeUTF("Silakan Login Terlebih Dahulu");
             String nama = is.readLine().trim();
             login(nama);
-            //os.println("Welcome " + nama + " Lets Gomoku!");
-            out.writeUTF("Welcome " + nama + " Lets Gomoku!");
+            os.println("Welcome " + nama + " Lets Gomoku!");
+            //out.writeUTF("Welcome " + nama + " Lets Gomoku!");
             System.out.println("Isi Tabel User = " + SocketServer.user);
             for (int i = 0; i < maxClientsCount; i++) {
                 if (threads[i] != null && threads[i] != this) {
                     threads[i].os.println("*** A new user " + nama
-                            + " entered the chat room !!! ***");
+                            + " entered the lobby !!! ***");
                     // threads[i].out.writeUTF("*** A new user " + nama
                     //       + " entered the chat room !!! ***");
                 }
             }
-            while (true) {
+            while (!playStatus) {
                 os.println("Silakan Masukan Pilihan \n 1.Create Room \n 2. Join Room \n 3. Chat with other Player");
                 // out.writeUTF("Silakan Masukan Pilihan \n 1.Create Room \n 2. Join Room \n 3. Chat with other Player");
-                displayRoom();
                 String pilihan = is.readLine().trim();
                 System.out.println("Pilihan Client : " + pilihan);
 
@@ -180,12 +179,15 @@ class clientThread extends Thread {
                     System.out.println("Nama Room :" + namaroom);
                     createRoom(namacreator, namaroom);
                     System.out.println(SocketServer.room);
-                    //os.println("Jumlah orang dalam room " + namaroom + " = " + countPlayer(namaroom));
-                    out.writeUTF("Jumlah orang dalam room " + namaroom + " = " + countPlayer(namaroom));
-                    //os.println("Jumlah room yang ada sekarang " + SocketServer.room.size());
-                    out.writeUTF("Jumlah room yang ada sekarang " + SocketServer.room.size());
+                    for (int i = 0; i < maxClientsCount; i++) {
+                        if (threads[i] != null && threads[i]==this) {
+                            os.println("Jumlah orang dalam room " + namaroom + " = " + countPlayer(namaroom));
+                            //out.writeUTF("Jumlah orang dalam room " + namaroom + " = " + countPlayer(namaroom));
+                            os.println("Jumlah room yang ada sekarang " + SocketServer.room.size());
+                            //out.writeUTF("Jumlah room yang ada sekarang " + SocketServer.room.size());
+                        }
+                    }
                     roomsize = SocketServer.room.size();
-                    displayRoom();
                     while(countPlayer(namaroom)<3){
                         //Just Wait
                     }
@@ -197,33 +199,42 @@ class clientThread extends Thread {
                         Play(namaroom);
                         os.println("Play");
                         //out.writeUTF("Play");
-
                     }
                     else{
                         playStatus = false;
                         System.out.println("Masuk No");
                         os.println("No");
-                        out.writeUTF("No");
+                        //out.writeUTF("No");
                     }
                 }
                 else if (pilihan.equals("2")){
+                    displayRoom();
                     String namajoin = nama;
-                    System.out.println("Masukan Nama Room yang ingin Di Join = ");
+                    os.println("Masukan Nama Room yang ingin Di Join = ");
                     String namaroom = is.readLine().trim();
                     System.out.println("Nama Joiner :" + namajoin);
                     System.out.println("Nama Room :" + namaroom);
                     joinRoom(namajoin, namaroom);
                     System.out.println(SocketServer.room);
-                    //os.println("Jumlah Player dalam Room "+ namaroom +" = "+countPlayer(namaroom));
-                    out.writeUTF("Jumlah Player dalam Room " + namaroom + " = " + countPlayer(namaroom));
-                    for(int i=1;i<countPlayer(namaroom)+1;i++){
-                        //os.println("Nama Player = "+SocketServer.room.get(getIndex(namaroom)).get(i));
-                        out.writeUTF("Nama Player = "+SocketServer.room.get(getIndex(namaroom)).get(i));
+                    for (int i = 0; i < maxClientsCount; i++) {
+                        if (threads[i] != null && threads[i]==this) {
+                            threads[i].os.println("Jumlah Player dalam Room "+ namaroom +" = "+countPlayer(namaroom));
+                            //out.writeUTF("Jumlah Player dalam Room " + namaroom + " = " + countPlayer(namaroom));
+                            for(int j=1;j<countPlayer(namaroom)+1;j++){
+                                threads[i].os.println("Nama Player = "+SocketServer.room.get(getIndex(namaroom)).get(j));
+                                //out.writeUTF("Nama Player = "+SocketServer.room.get(getIndex(namaroom)).get(i));
+                            }
+                        }
+                    }
+                    for (int i = 0; i < maxClientsCount; i++) {
+                        if (threads[i] != null && threads[i]!=this) {
+                            threads[i].os.println("Player "+nama+" has joined "+namaroom);
+                        }
                     }
                     while (playStatus != true){
 
                     }
-                    os.print("LETS PLAY!");
+                    os.println("LETS PLAY!");
                     //out.writeUTF("LETS PLAY!");
                     Play(namaroom);
                 }
