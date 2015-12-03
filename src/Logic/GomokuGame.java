@@ -96,15 +96,15 @@ public class GomokuGame {
     /**
      * Create a new game with set width and height
      */
-    public GomokuGame(GomokuConfig config, boolean record) {
-        this(new Board(config), config, record);
+    public GomokuGame(GomokuConfig config) {
+        this(new Board(config), config);
     }
 
     /**
      * Create a new game from a board
      * @param board
      */
-    public GomokuGame(Board board, GomokuConfig config, boolean record) {
+    public GomokuGame(Board board, GomokuConfig config) {
         this.board = board;
 
         playerOne = new Player("", Player.PLAYER1);
@@ -175,7 +175,7 @@ public class GomokuGame {
         }
 
         if (victory) {
-            debug("Game detected winner + " + player.getName() + "("
+            System.out.println("Game detected winner + " + player.getName() + "("
                     + player.getShapeName() + ")" + ". Notifying listeners.");
             gameOver = true;
             for (GomokuGameListener listener : listeners) {
@@ -221,8 +221,6 @@ public class GomokuGame {
             return playerThree;
         if (piece == playerFour.getShape())
             return playerFour;
-        if (piece == playerFive.getShape())
-            return playerFive;
         return null;
     }
 
@@ -386,5 +384,6 @@ public class GomokuGame {
     public void removeListener(GomokuGameListener listener) {
         listeners.remove(listener);
     }
+    
 
 }
