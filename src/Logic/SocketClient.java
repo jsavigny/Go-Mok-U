@@ -1,6 +1,7 @@
 /**
  * Created by user on 01/12/2015.
  */
+package Logic;
 import java.net.*;
 import java.io.*;
 import java.util.Scanner;
