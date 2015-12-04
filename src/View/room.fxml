@@ -99,7 +99,7 @@
                   </Text>
                   <ScrollPane prefHeight="200.0" prefWidth="299.0">
                      <content>
-                        <ListView prefHeight="198.0" prefWidth="277.0" />
+                        <ListView fx:id="listPlayer" prefHeight="198.0" prefWidth="277.0" />
                      </content>
                   </ScrollPane>
                </children>

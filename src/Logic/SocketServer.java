@@ -2,9 +2,21 @@ package Logic;
 import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
+import Logic.SocketServer;
 
-public class SocketServer extends Thread
-{
+import javax.xml.crypto.Data;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.PrintStream;
+import java.io.IOException;
+import java.net.Socket;
+import java.net.ServerSocket;
+import java.util.ArrayList;
+
+/*
+ * A chat server that delivers public and private messages.
+ */
+public class SocketServer {
     // The server socket.
     private static ServerSocket serverSocket = null;
     // The client socket.
@@ -16,35 +28,50 @@ public class SocketServer extends Thread
     public static ArrayList<String> user = new ArrayList<>();
     public static ArrayList<ArrayList<String>> room = new ArrayList<ArrayList<String>>();
     public static ArrayList<String> selector = new ArrayList<String>();
-    public SocketServer(int port) throws IOException
-    {
-        serverSocket = new ServerSocket(port);
-        serverSocket.setSoTimeout(1000000);
-    }
+    public static void main(String args[]) {
 
-    public static void main(String[] args) {
-        int port = Integer.parseInt(args[0]);
+        // The default port number.
+        int portNumber = 2222;
+        if (args.length < 1) {
+            System.out
+                    .println("Usage: java MultiThreadChatServer <portNumber>\n"
+                            + "Now using port number=" + portNumber);
+        } else {
+            portNumber = Integer.valueOf(args[0]).intValue();
+        }
+
+    /*
+     * Open a server socket on the portNumber (default 2222). Note that we can
+     * not choose a port less than 1023 if we are not privileged users (root).
+     */
         try {
-            serverSocket = new ServerSocket(port);
+            serverSocket = new ServerSocket(portNumber);
         } catch (IOException e) {
             System.out.println(e);
         }
+
+    /*
+     * Create a client socket for each connection and pass it to a new client
+     * thread.
+     */
         while (true) {
             try {
                 clientSocket = serverSocket.accept();
                 int i = 0;
-
                 for (i = 0; i < maxClientsCount; i++) {
                     if (threads[i] == null) {
-                        (threads[i] = new Logic.clientThread(clientSocket, threads)).start();
-                        countClient++;
+                        (threads[i] = new clientThread(clientSocket, threads)).start();
                         break;
                     }
                 }
-                //System.out.println("Jumlah client Thread Connected :"+countClient);
-                for (int j=0; j<countClient; j++){
-                    System.out.println("Jumlah client Thread Connected :"+countClient);
-                    System.out.println("Client Connected :"+threads[j]);
+                if (i == maxClientsCount) {
+                    PrintStream os = new PrintStream(clientSocket.getOutputStream());
+                    DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
+                    os.println("Server too busy. Try later.");
+                    out.writeUTF("Server too busy Try later.");
+                    os.close();
+                    out.close();
+                    clientSocket.close();
                 }
             } catch (IOException e) {
                 System.out.println(e);

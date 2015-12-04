@@ -19,7 +19,6 @@
                            </content>
                         </ScrollPane>
                         <Button fx:id="joinRoomButton" layoutX="143.0" layoutY="172.0" mnemonicParsing="false" text="Join" />
-                        <Button fx:id="refreshRoomList" layoutX="15.0" layoutY="172.0" mnemonicParsing="false" text="Refresh List" />
                      </children>
                   </AnchorPane>
             </content>
