@@ -56,10 +56,15 @@ public class RoomWaitController implements Initializable {
                 String listenServer=null;
                 while (true){
                     try {
+<<<<<<< HEAD
                         Thread.sleep(1000);
                         Main.socketClient.setArgument(LobbyController.user.getRoomName());
                         Main.socketClient.setArgument("displayUser");
                         Thread.sleep(500);
+=======
+                        Main.socketClient.setArgument(LobbyController.user.getRoomName());
+                        Main.socketClient.setArgument("displayUser");
+>>>>>>> origin/master
                         listenServer = Main.socketClient.getIs().readLine();
                         if (listenServer.equalsIgnoreCase("listUser")){
                             Platform.runLater(new Runnable(){
@@ -70,7 +75,11 @@ public class RoomWaitController implements Initializable {
                         } else {
                             System.out.println(listenServer);
                         }
+<<<<<<< HEAD
                         Thread.sleep(500);
+=======
+                        Thread.sleep(1000);
+>>>>>>> origin/master
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (InterruptedException e) {
@@ -84,6 +93,7 @@ public class RoomWaitController implements Initializable {
         }).start();
         playerWarning.setVisible(false);
 
+<<<<<<< HEAD
         refreshButton.setOnAction(event -> {
             Main.socketClient.setArgument("displayUser");
             Main.socketClient.setArgument(LobbyController.user.getRoomName());
@@ -101,6 +111,8 @@ public class RoomWaitController implements Initializable {
                 ex.printStackTrace();
             }
         });
+=======
+>>>>>>> origin/master
         playButton.setOnAction(event -> {
             Main.socketClient.setArgument("play");
             Main.socketClient.setArgument(LobbyController.user.getRoomName());

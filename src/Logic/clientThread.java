@@ -68,6 +68,7 @@ class clientThread extends Thread {
             found = SocketServer.room.get(i).contains(roomName);
             if( found == true){
                 System.out.println("Masuk contains");
+<<<<<<< HEAD
                 idx = i;
             }
         }
@@ -86,6 +87,30 @@ class clientThread extends Thread {
         }
         System.out.println(">>"+SocketServer.room.get(idx));
         int count = SocketServer.room.get(idx).size();
+=======
+                idx = i;
+            }
+        }
+        return idx;
+    }
+    public int countPlayer(String roomName){
+        int count;
+        int idx = -1;
+        boolean found = false;
+        for (int i=0;i<SocketServer.room.size();i++){
+            found = SocketServer.room.get(i).contains(roomName);
+            System.out.println(found);
+            System.out.println(i);
+            if( found ){
+                idx = i;
+            }
+        }
+        try {
+            count = SocketServer.room.get(idx).size();
+        } catch (ArrayIndexOutOfBoundsException e){
+            return 0;
+        }
+>>>>>>> origin/master
         return count-1;
     }
     public void displayRoom() throws IOException {

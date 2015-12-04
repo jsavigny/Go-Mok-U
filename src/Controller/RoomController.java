@@ -4,6 +4,10 @@ package Controller;
  * Created by Julio Savigny on 12/2/2015.
  */
 import Main.Main;
+<<<<<<< HEAD
+=======
+import javafx.application.Platform;
+>>>>>>> origin/master
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -46,6 +50,7 @@ public class RoomController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb){
+<<<<<<< HEAD
 
         try{
             ArrayList<String> userArrayList = new ArrayList<>();
@@ -64,10 +69,52 @@ public class RoomController implements Initializable {
         boolean found=false;
         int idx=0;
         while (!found){
+=======
+        LobbyController.state="Play";
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        try{
+                            int userListSize;
+                            ArrayList<String> userArrayList = new ArrayList<>();
+                            String fromServer = Main.socketClient.getIs().readLine();
+                            if (fromServer.equalsIgnoreCase("listUser")){
+                                userListSize = Integer.parseInt(Main.socketClient.getIs().readLine());
+                            } else {
+                                userListSize = Integer.parseInt(fromServer);
+                            }
+                            countPlayer=userListSize;
+                            for (int i=0;i<userListSize;i++){
+                                String toAdd = Main.socketClient.getIs().readLine();
+                                userArrayList.add(toAdd);
+                            }
+                            ObservableList<String> oList = FXCollections.observableArrayList(userArrayList);
+                            listPlayer.setItems(oList);
+                        } catch (Exception ex){
+                            ex.printStackTrace();
+                        }
+                    }
+                });
+            }
+        }).start();
+
+
+        boolean found=false;
+        int idx=0;
+        while ((!found)&&!(listPlayer.getItems().isEmpty())){
+>>>>>>> origin/master
             System.out.println(LobbyController.user.getName());
             if (listPlayer.getItems().get(idx).equalsIgnoreCase(LobbyController.user.getName())){
                 found=true;
             }
+<<<<<<< HEAD
+=======
+            //turnString.setText(listPlayer.getItems().get(turn)+" Turn");
+            turnString.setVisible(false);
+>>>>>>> origin/master
             idx++;
         }
         LobbyController.user.setIdInRoom(idx);
