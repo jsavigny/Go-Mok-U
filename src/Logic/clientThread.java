@@ -111,6 +111,11 @@ class clientThread extends Thread {
         }
     }
     public void Play(String roomName){
+        try {
+            displayUser(roomName);
+        } catch (Exception ex){
+            ex.printStackTrace();
+        }
         int idx = -1;
         boolean found = false;
         for (int i=0;i<SocketServer.room.size();i++){
@@ -120,33 +125,33 @@ class clientThread extends Thread {
             }
         }
         String race;
-        for (int i = 0; i < maxClientsCount; i++) {
+        /*for (int i = 0; i < maxClientsCount; i++) {
             if (threads[i] != null && threads[i] == this) {
                 for (int j = 1; j < countPlayer(roomName) + 1; j++) {
                     if (j == 1) {
                         race = "O";
                         System.out.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
-                        threads[i].os.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
+                        //threads[i].os.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
                     } else if (j == 2) {
                         race = "X";
                         System.out.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
-                        threads[i].os.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
+                        //threads[i].os.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
                     } else if (j == 3) {
                         race = "^";
                         System.out.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
-                        threads[i].os.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
+                        //threads[i].os.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
                     } else if (j == 4) {
                         race = "$";
                         System.out.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
-                        threads[i].os.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
+                        //threads[i].os.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
                     } else if (j == 5) {
                         race = "#";
                         System.out.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
-                        threads[i].os.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
+                        //threads[i].os.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
                     }
                 }
             }
-        }
+        }*/
     }
 
     public void run() {

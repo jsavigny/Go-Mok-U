@@ -4,7 +4,11 @@ import Main.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
@@ -63,7 +67,17 @@ public class RoomWaitController implements Initializable {
             Main.socketClient.setArgument("play");
             Main.socketClient.setArgument(LobbyController.roomNameVal);
             if (countPlayer>=3){
-
+                try{
+                    Parent root = FXMLLoader.load(getClass().getResource("../View/room.fxml"));
+                    Stage stage = new Stage();
+                    Scene scene = new Scene(root);
+                    stage.setTitle("Play!");
+                    stage.setScene(scene);
+                    stage.show();
+                    ((Node)(event.getSource())).getScene().getWindow().hide();
+                } catch (Exception ex){
+                    ex.printStackTrace();
+                }
             } else {
                 playerWarning.setVisible(true);
                 System.out.println("TIDAK CUKUP");
