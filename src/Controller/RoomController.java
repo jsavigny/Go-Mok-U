@@ -49,7 +49,10 @@ public class RoomController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb){
         LobbyController.state="Play";
-        listPlayer = RoomWaitController.pL;
+        for (String s : RoomWaitController.pL){
+            listPlayer.getItems().add(s);
+        }
+        listPlayer.getSelectionModel().select(0);
 
 
         boolean found=false;
@@ -60,10 +63,10 @@ public class RoomController implements Initializable {
                 found=true;
             }
             //turnString.setText(listPlayer.getItems().get(turn)+" Turn");
-            turnString.setVisible(false);
+            turnString.setVisible(true);
             idx++;
         }
-        turnString.setText(list);
+        turnString.setText("Player 1 Turn");
         LobbyController.user.setIdInRoom(idx);
         System.out.println("User id in room = "+LobbyController.user.getIdInRoom());
         roomName.setText(LobbyController.user.getRoomName());
@@ -111,7 +114,7 @@ public class RoomController implements Initializable {
                                         } else {
                                             System.out.println(listenServer);
                                         }
-                                        Thread.sleep(250);
+                                        Thread.sleep(100);
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     } catch (InterruptedException e) {
@@ -190,7 +193,8 @@ public class RoomController implements Initializable {
         } else {
             t++;
         }
-
+        turnString.setText("Player "+t+" Turn");
+        listPlayer.getSelectionModel().select(t-1);
         return t;
     }
     private void drawPane(int x,int y,int whose){

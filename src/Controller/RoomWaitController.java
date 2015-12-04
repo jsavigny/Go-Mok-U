@@ -32,7 +32,7 @@ public class RoomWaitController implements Initializable {
     @FXML
     private Button refreshButton;
     private int countPlayer;
-    public static ListView<String> pL;
+    public static ArrayList<String> pL;
     public void xRefreshUserList(){
         try{
             ArrayList<String> userArrayList = new ArrayList<>();
@@ -50,6 +50,7 @@ public class RoomWaitController implements Initializable {
     }
     @Override
     public void initialize(URL url, ResourceBundle rb){
+        pL = new ArrayList<>();
         LobbyController.state="RoomWait";
         new Thread(new Runnable() {
             @Override
@@ -75,9 +76,7 @@ public class RoomWaitController implements Initializable {
                         e.printStackTrace();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
-                    }
-                    if (countPlayer>=3){
-                        pL=playerList;
+                    } if (countPlayer>=3){
                         break;
                     }
                 }
@@ -89,6 +88,9 @@ public class RoomWaitController implements Initializable {
             Main.socketClient.setArgument("play");
             Main.socketClient.setArgument(LobbyController.user.getRoomName());
             if (countPlayer>=3){
+                for (String s : playerList.getItems()){
+                    pL.add(s);
+                }
                 try{
                     LobbyController.state="Transition";
                     Thread.sleep(500);
