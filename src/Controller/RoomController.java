@@ -63,6 +63,7 @@ public class RoomController implements Initializable {
             turnString.setVisible(false);
             idx++;
         }
+        turnString.setText(list);
         LobbyController.user.setIdInRoom(idx);
         System.out.println("User id in room = "+LobbyController.user.getIdInRoom());
         roomName.setText(LobbyController.user.getRoomName());
@@ -110,7 +111,7 @@ public class RoomController implements Initializable {
                                         } else {
                                             System.out.println(listenServer);
                                         }
-                                        Thread.sleep(1000);
+                                        Thread.sleep(250);
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     } catch (InterruptedException e) {
@@ -143,43 +144,53 @@ public class RoomController implements Initializable {
             @Override
             public void run() {
                 String listenServer=null;
-                while (!(turn==LobbyController.user.getIdInRoom())){
-                    try {
-
-                        listenServer = Main.socketClient.getIs().readLine();
-                        System.out.println(listenServer);
-                        if (listenServer.equalsIgnoreCase("draw")){
-                            int id = Integer.parseInt(Main.socketClient.getIs().readLine());
-                            int x = Integer.parseInt(Main.socketClient.getIs().readLine());
-                            int y = Integer.parseInt(Main.socketClient.getIs().readLine());
-                            System.out.println(id+" "+x+" "+y);
-                            Platform.runLater(new Runnable(){
-                                @Override public void run(){
-                                    drawPane(x,y,id);
-                                    turn=nexTurn(turn);
-                                }
-                            });
-                        } else {
-                            System.out.println("else "+listenServer);
+                while (true) {
+                    if (!(turn == LobbyController.user.getIdInRoom())) {
+                        try {
+                            listenServer = Main.socketClient.getIs().readLine();
+                            System.out.println(listenServer);
+                            if (listenServer.equalsIgnoreCase("draw")) {
+                                int id = Integer.parseInt(Main.socketClient.getIs().readLine());
+                                int x = Integer.parseInt(Main.socketClient.getIs().readLine());
+                                int y = Integer.parseInt(Main.socketClient.getIs().readLine());
+                                System.out.println(id + " " + x + " " + y);
+                                Platform.runLater(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        drawPane(x, y, id);
+                                        turn = nexTurn(turn);
+                                    }
+                                });
+                            } else {
+                                System.out.println("else " + listenServer);
+                            }
+                            Thread.sleep(1000);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
+
+                    } else {
+                        System.out.println("Giliranku!");
+                    }
+                    try {
                         Thread.sleep(1000);
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-
                 }
             }
         }).start();
 
     }
     private int nexTurn(int t){
-        if (t==countPlayer){
-            t=0;
+        if (t==3){
+            t=1;
         } else {
             t++;
         }
+
         return t;
     }
     private void drawPane(int x,int y,int whose){
@@ -193,13 +204,13 @@ public class RoomController implements Initializable {
         }
         String color="brown";
         if (whose%4==0){
-            color="red";
+            color="yellow";
         } else if (whose%4==1){
-            color="blue";
+            color="red";
         } else if (whose%4==2){
-            color="purple";
-        } else if (whose%4==3){
             color="green";
+        } else if (whose%4==3){
+            color="blue";
         }
         result.setStyle("-fx-background-color: "+color);
     }
