@@ -74,6 +74,7 @@ class clientThread extends Thread {
         return idx;
     }
     public int countPlayer(String roomName){
+        int count;
         int idx = -1;
         boolean found = false;
         for (int i=0;i<SocketServer.room.size();i++){
@@ -84,8 +85,11 @@ class clientThread extends Thread {
                 idx = i;
             }
         }
-        System.out.println(">>"+SocketServer.room.get(idx));
-        int count = SocketServer.room.get(idx).size();
+        try {
+            count = SocketServer.room.get(idx).size();
+        } catch (ArrayIndexOutOfBoundsException e){
+            return 0;
+        }
         return count-1;
     }
     public void displayRoom() throws IOException {

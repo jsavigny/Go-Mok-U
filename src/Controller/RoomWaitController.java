@@ -56,10 +56,8 @@ public class RoomWaitController implements Initializable {
                 String listenServer=null;
                 while (true){
                     try {
-                        Thread.sleep(1000);
                         Main.socketClient.setArgument(LobbyController.user.getRoomName());
                         Main.socketClient.setArgument("displayUser");
-                        Thread.sleep(500);
                         listenServer = Main.socketClient.getIs().readLine();
                         if (listenServer.equalsIgnoreCase("listUser")){
                             Platform.runLater(new Runnable(){
@@ -70,7 +68,7 @@ public class RoomWaitController implements Initializable {
                         } else {
                             System.out.println(listenServer);
                         }
-                        Thread.sleep(500);
+                        Thread.sleep(1000);
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (InterruptedException e) {
@@ -84,23 +82,6 @@ public class RoomWaitController implements Initializable {
         }).start();
         playerWarning.setVisible(false);
 
-        refreshButton.setOnAction(event -> {
-            Main.socketClient.setArgument("displayUser");
-            Main.socketClient.setArgument(LobbyController.user.getRoomName());
-            try{
-                ArrayList<String> userArrayList = new ArrayList<>();
-                int userListSize = Integer.parseInt(Main.socketClient.getIs().readLine());
-                countPlayer=userListSize;
-                for (int i=0;i<userListSize;i++){
-                    String toAdd = Main.socketClient.getIs().readLine();
-                    userArrayList.add(toAdd);
-                }
-                ObservableList<String> oList = FXCollections.observableArrayList(userArrayList);
-                playerList.setItems(oList);
-            } catch (Exception ex){
-                ex.printStackTrace();
-            }
-        });
         playButton.setOnAction(event -> {
             Main.socketClient.setArgument("play");
             Main.socketClient.setArgument(LobbyController.user.getRoomName());

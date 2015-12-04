@@ -4,6 +4,7 @@ package Controller;
  * Created by Julio Savigny on 12/2/2015.
  */
 import Main.Main;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -46,35 +47,52 @@ public class RoomController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb){
-
-        try{
-            ArrayList<String> userArrayList = new ArrayList<>();
-            int userListSize = Integer.parseInt(Main.socketClient.getIs().readLine());
-            countPlayer=userListSize;
-            for (int i=0;i<userListSize;i++){
-                String toAdd = Main.socketClient.getIs().readLine();
-                userArrayList.add(toAdd);
+        LobbyController.state="Play";
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        try{
+                            int userListSize;
+                            ArrayList<String> userArrayList = new ArrayList<>();
+                            String fromServer = Main.socketClient.getIs().readLine();
+                            if (fromServer.equalsIgnoreCase("listUser")){
+                                userListSize = Integer.parseInt(Main.socketClient.getIs().readLine());
+                            } else {
+                                userListSize = Integer.parseInt(fromServer);
+                            }
+                            countPlayer=userListSize;
+                            for (int i=0;i<userListSize;i++){
+                                String toAdd = Main.socketClient.getIs().readLine();
+                                userArrayList.add(toAdd);
+                            }
+                            ObservableList<String> oList = FXCollections.observableArrayList(userArrayList);
+                            listPlayer.setItems(oList);
+                        } catch (Exception ex){
+                            ex.printStackTrace();
+                        }
+                    }
+                });
             }
-            ObservableList<String> oList = FXCollections.observableArrayList(userArrayList);
-            listPlayer.setItems(oList);
-        } catch (Exception ex){
-            ex.printStackTrace();
-        }
+        }).start();
+
 
         boolean found=false;
         int idx=0;
-        while (!found){
+        while ((!found)&&!(listPlayer.getItems().isEmpty())){
             System.out.println(LobbyController.user.getName());
             if (listPlayer.getItems().get(idx).equalsIgnoreCase(LobbyController.user.getName())){
                 found=true;
             }
+            //turnString.setText(listPlayer.getItems().get(turn)+" Turn");
+            turnString.setVisible(false);
             idx++;
         }
         LobbyController.user.setIdInRoom(idx);
         roomName.setText(LobbyController.user.getRoomName());
         congratString.setVisible(false);
-        turnString.setVisible(false);
-        turnString.setText(listPlayer.getItems().get(turn)+" Turn");
         for (int i=0; i<20; i++){
             for (int j=0; j<20; j++){
                 Pane pane = new Pane();
