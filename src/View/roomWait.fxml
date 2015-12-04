@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
@@ -11,5 +12,7 @@
             <ListView fx:id="playerList" prefHeight="165.0" prefWidth="284.0" />
          </content></ScrollPane>
       <Button fx:id="playButton" layoutX="141.0" layoutY="201.0" mnemonicParsing="false" text="Play" />
+      <Button fx:id="refreshButton" layoutX="17.0" layoutY="201.0" mnemonicParsing="false" text="Refresh" />
+      <Text fx:id="playerWarning" layoutX="186.0" layoutY="210.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wait for 3 or more players!" wrappingWidth="119.990234375" />
    </children>
 </AnchorPane>

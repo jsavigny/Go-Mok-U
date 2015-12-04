@@ -40,7 +40,7 @@ public class SocketClient implements Runnable {
      * Open a socket on a given host and port. Open input and output streams.
      */
         try {
-            clientSocket = new Socket(host, portNumber);
+            clientSocket = new Socket("localhost", 6969);
             inputLine = new BufferedReader(new InputStreamReader(System.in));
             os = new PrintStream(clientSocket.getOutputStream());
             is = new DataInputStream(clientSocket.getInputStream());

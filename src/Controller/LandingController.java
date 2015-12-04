@@ -1,6 +1,7 @@
 package Controller;
 
 import Logic.SocketClient;
+import Main.Main;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -12,7 +13,6 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.*;
-import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Scanner;
@@ -21,9 +21,6 @@ import java.util.Scanner;
  * Created by Julio Savigny on 12/2/2015.
  */
 public class LandingController implements Initializable {
-    public static Socket client;
-    public static DataOutputStream out;
-    public static DataInputStream in;
     @FXML
     private Button submitNickname;
 
@@ -37,6 +34,7 @@ public class LandingController implements Initializable {
                 nickName = nickNameTextField.getText();
                 Parent root;
                 try {
+                    Main.socketClient.setArgument(nickName);
                     root = FXMLLoader.load(getClass().getResource("../View/lobby.fxml"));
                     Stage stage = new Stage();
                     Scene scene = new Scene(root);
@@ -51,19 +49,5 @@ public class LandingController implements Initializable {
                 nickNameTextField.setText("John Doe");
             }
         });
-        try
-        {
-            String serverName = "127.0.0.1";
-            int port = 8080;
-            System.out.println("Connecting to " + serverName + " on port " + port);
-            client = new Socket(serverName, port);
-            OutputStream outToServer = client.getOutputStream();
-            out = new DataOutputStream(outToServer);
-            InputStream inFromServer = client.getInputStream();
-            in = new DataInputStream(inFromServer);
-        }catch(IOException e)
-        {
-            e.printStackTrace();
-        }
     }
 }
