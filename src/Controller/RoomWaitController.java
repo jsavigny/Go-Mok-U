@@ -48,7 +48,7 @@ public class RoomWaitController implements Initializable {
         }
         refreshButton.setOnAction(event -> {
             Main.socketClient.setArgument("displayUser");
-            Main.socketClient.setArgument(LobbyController.roomNameVal);
+            Main.socketClient.setArgument(LobbyController.user.getRoomName());
             try{
                 ArrayList<String> userArrayList = new ArrayList<>();
                 int userListSize = Integer.parseInt(Main.socketClient.getIs().readLine());
@@ -65,7 +65,7 @@ public class RoomWaitController implements Initializable {
         });
         playButton.setOnAction(event -> {
             Main.socketClient.setArgument("play");
-            Main.socketClient.setArgument(LobbyController.roomNameVal);
+            Main.socketClient.setArgument(LobbyController.user.getRoomName());
             if (countPlayer>=3){
                 try{
                     Parent root = FXMLLoader.load(getClass().getResource("../View/room.fxml"));
@@ -80,7 +80,7 @@ public class RoomWaitController implements Initializable {
                 }
             } else {
                 playerWarning.setVisible(true);
-                System.out.println("TIDAK CUKUP");
+                System.out.println("TIDAK CUKUP PEMAIN");
             }
         });
 
