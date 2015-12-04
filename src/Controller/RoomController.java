@@ -15,6 +15,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -48,35 +49,7 @@ public class RoomController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb){
         LobbyController.state="Play";
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        try{
-                            int userListSize;
-                            ArrayList<String> userArrayList = new ArrayList<>();
-                            String fromServer = Main.socketClient.getIs().readLine();
-                            if (fromServer.equalsIgnoreCase("listUser")){
-                                userListSize = Integer.parseInt(Main.socketClient.getIs().readLine());
-                            } else {
-                                userListSize = Integer.parseInt(fromServer);
-                            }
-                            countPlayer=userListSize;
-                            for (int i=0;i<userListSize;i++){
-                                String toAdd = Main.socketClient.getIs().readLine();
-                                userArrayList.add(toAdd);
-                            }
-                            ObservableList<String> oList = FXCollections.observableArrayList(userArrayList);
-                            listPlayer.setItems(oList);
-                        } catch (Exception ex){
-                            ex.printStackTrace();
-                        }
-                    }
-                });
-            }
-        }).start();
+        listPlayer = RoomWaitController.pL;
 
 
         boolean found=false;
@@ -91,6 +64,7 @@ public class RoomController implements Initializable {
             idx++;
         }
         LobbyController.user.setIdInRoom(idx);
+        System.out.println("User id in room = "+LobbyController.user.getIdInRoom());
         roomName.setText(LobbyController.user.getRoomName());
         congratString.setVisible(false);
         for (int i=0; i<20; i++){
@@ -106,18 +80,49 @@ public class RoomController implements Initializable {
                 }
                 pane.setOnMouseClicked(e->{
                     System.out.println("Baris "+board.getRowIndex(pane)+" Kolom "+board.getColumnIndex(pane)+" Berhasil di klik!");
-                    if ((!pane.getId().equalsIgnoreCase("kosong"))&&(turn==LobbyController.user.getIdInRoom())){
+                    int x=GridPane.getRowIndex(pane);
+                    int y=GridPane.getColumnIndex(pane);
+                    System.out.println("TURN = "+turn);
+                    if ((pane.getId().equalsIgnoreCase("kosong"))&&(turn==LobbyController.user.getIdInRoom())){
                         Main.socketClient.setArgument("move");
-                        Main.socketClient.setArgument(String.valueOf(GridPane.getRowIndex(pane)));
-                        Main.socketClient.setArgument(String.valueOf(GridPane.getColumnIndex(pane)));
-                        while(fromServer.equalsIgnoreCase(null)){
-                            try {
-                                Thread.sleep(500);
-                                fromServer=Main.socketClient.getIs().readLine();
-                            } catch (Exception e1) {
-                                e1.printStackTrace();
+                        Main.socketClient.setArgument(String.valueOf(x));
+                        Main.socketClient.setArgument(String.valueOf(y));
+                        Main.socketClient.setArgument(String.valueOf(turn));
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                String listenServer=null;
+                                final boolean[] stopListen = new boolean[1];
+                                while (true){
+                                    System.out.println(stopListen[0]);
+                                    stopListen[0] =false;
+                                    try {
+                                        listenServer = Main.socketClient.getIs().readLine();
+                                        if (listenServer.equalsIgnoreCase("ok")){
+                                            Platform.runLater(new Runnable(){
+                                                @Override public void run(){
+                                                    drawPane(x,y,turn);
+                                                    turn=nexTurn(turn);
+                                                    stopListen[0] =true;
+                                                    pane.setId("tidak kosong");
+                                                }
+                                            });
+                                        } else {
+                                            System.out.println(listenServer);
+                                        }
+                                        Thread.sleep(1000);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                    if (stopListen[0]){
+                                        break;
+                                    }
+
+                                }
                             }
-                        }
+                        }).start();
                     }
                 });
                 board.add(pane,i,j);
@@ -134,6 +139,39 @@ public class RoomController implements Initializable {
                 e.printStackTrace();
             }
         }*/
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String listenServer=null;
+                while (!(turn==LobbyController.user.getIdInRoom())){
+                    try {
+
+                        listenServer = Main.socketClient.getIs().readLine();
+                        System.out.println(listenServer);
+                        if (listenServer.equalsIgnoreCase("draw")){
+                            int id = Integer.parseInt(Main.socketClient.getIs().readLine());
+                            int x = Integer.parseInt(Main.socketClient.getIs().readLine());
+                            int y = Integer.parseInt(Main.socketClient.getIs().readLine());
+                            System.out.println(id+" "+x+" "+y);
+                            Platform.runLater(new Runnable(){
+                                @Override public void run(){
+                                    drawPane(x,y,id);
+                                    turn=nexTurn(turn);
+                                }
+                            });
+                        } else {
+                            System.out.println("else "+listenServer);
+                        }
+                        Thread.sleep(1000);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        }).start();
 
     }
     private int nexTurn(int t){

@@ -111,6 +111,7 @@ class clientThread extends Thread {
                 //out.writeUTF("Jumlah Player dalam Room " + namaroom + " = " + countPlayer(namaroom));
                 for(int j=1;j<countPlayer(roomName)+1;j++){
                     threads[i].os.println(SocketServer.room.get(getIndex(roomName)).get(j));
+                    System.out.println("Thread: "+threads[i]);
                     System.out.println("Player: "+SocketServer.room.get(getIndex(roomName)).get(j));
                     //out.writeUTF("Nama Player = "+SocketServer.room.get(getIndex(namaroom)).get(i));
                 }
@@ -118,11 +119,8 @@ class clientThread extends Thread {
         }
     }
     public void Play(String roomName){
-        try {
-            displayUser(roomName);
-        } catch (Exception ex){
-            ex.printStackTrace();
-        }
+        System.out.println("Masuk Play");
+        boolean gameOver=false;
         int idx = -1;
         boolean found = false;
         for (int i=0;i<SocketServer.room.size();i++){
@@ -131,36 +129,33 @@ class clientThread extends Thread {
                 idx = i;
             }
         }
-        String race;
-        /*for (int i = 0; i < maxClientsCount; i++) {
-            if (threads[i] != null && threads[i] == this) {
-                for (int j = 1; j < countPlayer(roomName) + 1; j++) {
-                    if (j == 1) {
-                        race = "O";
-                        System.out.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
-                        //threads[i].os.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
-                    } else if (j == 2) {
-                        race = "X";
-                        System.out.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
-                        //threads[i].os.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
-                    } else if (j == 3) {
-                        race = "^";
-                        System.out.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
-                        //threads[i].os.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
-                    } else if (j == 4) {
-                        race = "$";
-                        System.out.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
-                        //threads[i].os.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
-                    } else if (j == 5) {
-                        race = "#";
-                        System.out.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
-                        //threads[i].os.println(SocketServer.room.get(idx).get(j) + " NOW PLAYING " + race);
+        while(!gameOver){
+            try {
+                String listenClient;
+                listenClient = is.readLine();
+                System.out.println(listenClient);
+                if (listenClient.equals("move")){
+                    int x = Integer.parseInt(is.readLine());
+                    int y = Integer.parseInt(is.readLine());
+                    int idInRoom = Integer.parseInt(is.readLine());
+                    System.out.println(x+"-"+y+":"+idInRoom);
+                    os.println("ok");
+                    System.out.println("ok");
+                    for (int i=0;i<maxClientsCount;i++){
+                        if (threads[i] != null && threads[i]!=this){
+                            threads[i].os.println("draw");
+                            System.out.println("Thread :"+threads[i]);
+                            threads[i].os.println(idInRoom);
+                            threads[i].os.println(x);
+                            threads[i].os.println(y);
+                        }
                     }
                 }
+            } catch (Exception e){
+                e.printStackTrace();
             }
-        }*/
+        }
     }
-
     public void run() {
         int maxClientsCount = this.maxClientsCount;
         clientThread[] threads = this.threads;
@@ -280,10 +275,13 @@ class clientThread extends Thread {
                     displayUser(roomName);
                 } else if (pilihan.equalsIgnoreCase("play")){
                     String roomName = is.readLine().trim();
+                    os.println("okPlay");
                     int playerCount = countPlayer(roomName);
-                    if (playerCount>=3){
+                    if (playerCount>=3) {
                         Play(roomName);
+                        playStatus = true;
                     }
+
                 }
                 /*
                 for (int i = 0; i < maxClientsCount; i++) {

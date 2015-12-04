@@ -101,8 +101,8 @@ public class Main extends Application {
             try {
                 while(true){
                     Thread.sleep(250);
-                    System.out.println("Argument ="+argument);
                     if (!argument.isEmpty()) {
+                        System.out.println("Argument ="+argument);
                         os.println(argument.remove());
                     }
                 }

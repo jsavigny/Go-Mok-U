@@ -13,21 +13,16 @@ import java.net.Socket;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 
-/*
- * A chat server that delivers public and private messages.
- */
 public class SocketServer {
-    // The server socket.
     private static ServerSocket serverSocket = null;
-    // The client socket.
     private static Socket clientSocket = null;
-    // This chat server can accept up to maxClientsCount clients' connections.
     private static final int maxClientsCount = 5;
     private static final clientThread[] threads = new clientThread[maxClientsCount];
     private static int countClient = 0;
     public static ArrayList<String> user = new ArrayList<>();
     public static ArrayList<ArrayList<String>> room = new ArrayList<ArrayList<String>>();
     public static ArrayList<String> selector = new ArrayList<String>();
+    public static int playQuota;
     public static void main(String args[]) {
 
         // The default port number.
@@ -40,20 +35,12 @@ public class SocketServer {
             portNumber = Integer.valueOf(args[0]).intValue();
         }
 
-    /*
-     * Open a server socket on the portNumber (default 2222). Note that we can
-     * not choose a port less than 1023 if we are not privileged users (root).
-     */
         try {
             serverSocket = new ServerSocket(portNumber);
         } catch (IOException e) {
             System.out.println(e);
         }
 
-    /*
-     * Create a client socket for each connection and pass it to a new client
-     * thread.
-     */
         while (true) {
             try {
                 clientSocket = serverSocket.accept();

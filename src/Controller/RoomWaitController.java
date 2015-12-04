@@ -32,6 +32,7 @@ public class RoomWaitController implements Initializable {
     @FXML
     private Button refreshButton;
     private int countPlayer;
+    public static ListView<String> pL;
     public void xRefreshUserList(){
         try{
             ArrayList<String> userArrayList = new ArrayList<>();
@@ -56,8 +57,9 @@ public class RoomWaitController implements Initializable {
                 String listenServer=null;
                 while (true){
                     try {
-                        Main.socketClient.setArgument(LobbyController.user.getRoomName());
                         Main.socketClient.setArgument("displayUser");
+                        Main.socketClient.setArgument(LobbyController.user.getRoomName());
+                        Thread.sleep(500);
                         listenServer = Main.socketClient.getIs().readLine();
                         if (listenServer.equalsIgnoreCase("listUser")){
                             Platform.runLater(new Runnable(){
@@ -66,15 +68,16 @@ public class RoomWaitController implements Initializable {
                                 }
                             });
                         } else {
-                            System.out.println(listenServer);
+                            System.out.println("ListenServer "+listenServer);
                         }
-                        Thread.sleep(1000);
+                        Thread.sleep(2000);
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    if (!LobbyController.state.equalsIgnoreCase("RoomWait")){
+                    if (countPlayer>=3){
+                        pL=playerList;
                         break;
                     }
                 }
@@ -87,13 +90,19 @@ public class RoomWaitController implements Initializable {
             Main.socketClient.setArgument(LobbyController.user.getRoomName());
             if (countPlayer>=3){
                 try{
-                    Parent root = FXMLLoader.load(getClass().getResource("../View/room.fxml"));
-                    Stage stage = new Stage();
-                    Scene scene = new Scene(root);
-                    stage.setTitle("Play!");
-                    stage.setScene(scene);
-                    stage.show();
-                    ((Node)(event.getSource())).getScene().getWindow().hide();
+                    LobbyController.state="Transition";
+                    Thread.sleep(500);
+                    String listen=Main.socketClient.getIs().readLine();
+                    System.out.println(listen);
+                    if (listen.equalsIgnoreCase("okPlay")) {
+                        Parent root = FXMLLoader.load(getClass().getResource("../View/room.fxml"));
+                        Stage stage = new Stage();
+                        Scene scene = new Scene(root);
+                        stage.setTitle("Play!");
+                        stage.setScene(scene);
+                        stage.show();
+                        ((Node) (event.getSource())).getScene().getWindow().hide();
+                    }
                 } catch (Exception ex){
                     ex.printStackTrace();
                 }
