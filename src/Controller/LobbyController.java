@@ -18,6 +18,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -86,31 +87,60 @@ public class LobbyController implements Initializable {
         private String roomName;
         private int idInRoom;
     }
-
+    public static String state;
     public static User user;
 
     private int pil;
     private ArrayList<String> roomArrayList;
+    public void xRefreshRoomList(){
+        try{
+            int roomListSize = Integer.parseInt(Main.socketClient.getIs().readLine());
+            roomArrayList = new ArrayList<String>();
+            for (int i=0;i<roomListSize;i++){
+                roomArrayList.add(Main.socketClient.getIs().readLine());
+            }
+            ObservableList<String> oList = FXCollections.observableArrayList(roomArrayList);
+            roomList.setItems(oList);
+        } catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }
     @Override
     public void initialize(URL url, ResourceBundle rb){
-
+        state="Lobby";
         user = new User();
         pilJoin.setOnSelectionChanged(event -> {
             if (pilJoin.isSelected()) {
-                Main.socketClient.setArgument("display");
-                try{
-                    int roomListSize = Integer.parseInt(Main.socketClient.getIs().readLine());
-                    roomArrayList = new ArrayList<String>();
-                    for (int i=0;i<roomListSize;i++){
-                        roomArrayList.add(Main.socketClient.getIs().readLine());
-                    }
-                    ObservableList<String> oList = FXCollections.observableArrayList(roomArrayList);
-                    roomList.setItems(oList);
-                } catch (Exception ex){
-                    ex.printStackTrace();
-                }
             }
         });
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String listenServer=null;
+                while (true){
+                    try {
+                        Main.socketClient.setArgument("display");
+                        Thread.sleep(500);
+                        listenServer = Main.socketClient.getIs().readLine();
+                        if (listenServer.equalsIgnoreCase("listRoom")){
+                            Platform.runLater(new Runnable(){
+                                @Override public void run(){
+                                    xRefreshRoomList();
+                                }
+                            });
+                        }
+                        Thread.sleep(500);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if (!state.equalsIgnoreCase("Lobby")){
+                        break;
+                    }
+                }
+            }
+        }).start();
 
         createRoomButton.setOnAction(event -> {
             user.setRoomName(roomName.getText());
@@ -156,7 +186,6 @@ public class LobbyController implements Initializable {
 
 
         try {
-            System.out.println("Lobby " + LandingController.nickName);
             user.setName(LandingController.nickName);
         } catch (Exception ex){
             ex.printStackTrace();

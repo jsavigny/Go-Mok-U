@@ -29,6 +29,7 @@ public class LandingController implements Initializable {
     public static String nickName;
     @Override
     public void initialize(URL url, ResourceBundle rb){
+
         submitNickname.setOnAction(e -> {
             if (!nickNameTextField.getText().equals("")) {
                 nickName = nickNameTextField.getText();

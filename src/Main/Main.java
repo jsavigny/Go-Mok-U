@@ -14,6 +14,8 @@ import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -71,7 +73,7 @@ public class Main extends Application {
 
         private BufferedReader inputLine = null;
         private boolean closed = false;
-        private ArrayList<String> argument;
+        private Queue<String> argument;
         public void setArgument(String argument){
             this.argument.add(argument);
         }
@@ -81,7 +83,7 @@ public class Main extends Application {
             int portNumber = 2222;
             // The default host.
             String host = "localhost";
-            argument = new ArrayList<>();
+            argument = new LinkedList<>();
     /*
      * Open a socket on a given host and port. Open input and output streams.
      */     String fromServer="";
@@ -98,16 +100,10 @@ public class Main extends Application {
             }
             try {
                 while(true){
-                    Thread.sleep(500);
+                    Thread.sleep(250);
                     System.out.println("Argument ="+argument);
                     if (!argument.isEmpty()) {
-                        for (int i=0;i<argument.size();i++) {
-                            os.println(argument.get(i));
-                            if (argument.get(i).equalsIgnoreCase("display")){
-
-                            }
-                            argument.remove(i);
-                        }
+                        os.println(argument.remove());
                     }
                 }
             } catch (InterruptedException e) {

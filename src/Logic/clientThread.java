@@ -78,10 +78,13 @@ class clientThread extends Thread {
         boolean found = false;
         for (int i=0;i<SocketServer.room.size();i++){
             found = SocketServer.room.get(i).contains(roomName);
-            if( found == true){
+            System.out.println(found);
+            System.out.println(i);
+            if( found ){
                 idx = i;
             }
         }
+        System.out.println(">>"+SocketServer.room.get(idx));
         int count = SocketServer.room.get(idx).size();
         return count-1;
     }
@@ -197,7 +200,6 @@ class clientThread extends Thread {
                     createRoom(namacreator, namaroom);
                     System.out.println(SocketServer.room);
                     roomsize = SocketServer.room.size();
-                    displayUser(namaroom);
                     /*while(countPlayer(namaroom)<3){
                         //Just Wait
                     }
@@ -225,7 +227,6 @@ class clientThread extends Thread {
                     System.out.println("Nama Room :" + namaroom);
                     joinRoom(namajoin, namaroom);
                     System.out.println(SocketServer.room);
-                    displayUser(namaroom);
                     /*for (int i = 0; i < maxClientsCount; i++) {
                         if (threads[i] != null && threads[i]!=this) {
                             threads[i].os.println("Player "+nama+" has joined "+namaroom);
@@ -267,8 +268,10 @@ class clientThread extends Thread {
                     os.println("*** Bye " + nama + " ***");
                     //out.writeUTF("*** Bye " + nama + " ***");
                 } else if (pilihan.equalsIgnoreCase("display")){
+                    os.println("listRoom");
                     displayRoom();
                 } else if (pilihan.equalsIgnoreCase("displayUser")){
+                    os.println("listUser");
                     String roomName = is.readLine().trim();
                     displayUser(roomName);
                 } else if (pilihan.equalsIgnoreCase("play")){
