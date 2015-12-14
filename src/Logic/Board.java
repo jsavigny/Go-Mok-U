@@ -97,6 +97,7 @@ public class Board {
             board.setPiece(x, y, player);
             board.fireChangeListeners(player, x, y);
             done = true;
+            System.out.println("do Action Board");
         }
 
         @Override
@@ -112,6 +113,9 @@ public class Board {
     /** Empty constructor */
     @SuppressWarnings("unused")
     private Board() {
+        this.config=new GomokuConfig();
+        listeners = new ArrayList<ChangeListener>();
+        reset();
     }
 
     public Board(GomokuConfig config) {
@@ -253,6 +257,7 @@ public class Board {
      * @return
      */
     protected int count(int shape, int x, int y, int dirX, int dirY) {
+        System.out.println("Masuk Count "+x+"-"+y);
         int ct = 1;
         int xpos, ypos;
         xpos = x + dirX;
@@ -324,11 +329,11 @@ public class Board {
             throw new IllegalArgumentException("Position out of bounds. X: "
                     + x + ", Y: " + y);
         }
-        if (player != Board.PLAYER1 && player != Board.PLAYER2
+        /*if (player != Board.PLAYER1 && player != Board.PLAYER2
                 && player != Board.NOPLAYER) {
             throw new IllegalArgumentException("Unknown value of player: \""
                     + player + "\".");
-        }
+        }*/
 
         board[x + config.getWidth() * y] = player;
     }

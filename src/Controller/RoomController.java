@@ -164,6 +164,15 @@ public class RoomController implements Initializable {
                                         turn = nexTurn(turn);
                                     }
                                 });
+                            } else if (listenServer.equalsIgnoreCase("gameOver")) {
+                                int winner = Integer.parseInt(Main.socketClient.getIs().readLine());
+                                Platform.runLater(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        congratString.setText("Game Over. The Winner is = Player "+winner);
+                                        congratString.setVisible(true);
+                                    }
+                                });
                             } else {
                                 System.out.println("else " + listenServer);
                             }

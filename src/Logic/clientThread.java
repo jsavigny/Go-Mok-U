@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 class clientThread extends Thread {
 
+    private static GomokuGame gomokuGame;
     private DataInputStream is = null;
     private PrintStream os = null;
     private DataOutputStream out = null;
@@ -119,8 +120,10 @@ class clientThread extends Thread {
         }
     }
     public void Play(String roomName){
+        int idInRoom=0;
         System.out.println("Masuk Play");
         boolean gameOver=false;
+        gomokuGame = new GomokuGame(new Board(new GomokuConfig()),new GomokuConfig());
         int idx = -1;
         boolean found = false;
         for (int i=0;i<SocketServer.room.size();i++){
@@ -137,8 +140,10 @@ class clientThread extends Thread {
                 if (listenClient.equals("move")){
                     int x = Integer.parseInt(is.readLine());
                     int y = Integer.parseInt(is.readLine());
-                    int idInRoom = Integer.parseInt(is.readLine());
+                    idInRoom = Integer.parseInt(is.readLine());
                     System.out.println(x+"-"+y+":"+idInRoom);
+                    gomokuGame.placePiece(x,y,gomokuGame.getPlayer(idInRoom),false);
+                    System.out.println("GOMOKUPLAYER :"+gomokuGame.getPlayer(idInRoom));
                     os.println("ok");
                     System.out.println("ok");
                     for (int i=0;i<maxClientsCount;i++){
@@ -153,6 +158,16 @@ class clientThread extends Thread {
                 }
             } catch (Exception e){
                 e.printStackTrace();
+            }
+            System.out.println(gomokuGame.isGameOver());
+            gameOver=gomokuGame.isGameOver();
+        }
+        if (gameOver){
+            for (int i=0;i<maxClientsCount;i++){
+                if (threads[i] != null){
+                    threads[i].os.println("gameOver");
+                    threads[i].os.println(idInRoom);
+                }
             }
         }
     }

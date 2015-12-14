@@ -62,9 +62,12 @@ public class GomokuGame {
             if (game.gameOver)
                 throw new IllegalActionException("Game over. Cannot place piece.");
             // Biar setelah gameOver tidak bisa diklik
+            System.out.println(player);
+            System.out.println(game.turn.getShape());
             if (game.turn.getShape() == player && (player != Board.NOPLAYER)) {
                 boardAction.doAction(game.getBoard());
                 done = true;
+                System.out.println("do Action Game");
                 if (!waitForConfirm)
                     confirmAction(game);
             } else {
@@ -107,10 +110,10 @@ public class GomokuGame {
     public GomokuGame(Board board, GomokuConfig config) {
         this.board = board;
 
-        playerOne = new Player("", Player.PLAYER1);
-        playerTwo = new Player("", Player.PLAYER2);
-        playerThree = new Player("", Player.PLAYER3);
-        playerFour = new Player("", Player.PLAYER4);
+        playerOne = new Player("", Player.PLAYER1,Player.PLAYER1);
+        playerTwo = new Player("", Player.PLAYER2, Player.PLAYER2);
+        playerThree = new Player("", Player.PLAYER3, Player.PLAYER3);
+        playerFour = new Player("", Player.PLAYER4, Player.PLAYER4);
         turn = playerOne;
         gameOver = false;
 
@@ -194,8 +197,11 @@ public class GomokuGame {
      */
     public PlacePieceGameAction placePiece(int x, int y, Player player,
             boolean waitForConfirm) throws IllegalActionException {
-        if (player == null)
+        System.out.println("masuk placepiece");
+        if (player == null){
+            System.out.println("null player");
             throw new IllegalArgumentException("Player cannot be null");
+        }
         PlacePieceGameAction action = new PlacePieceGameAction(
                 player.getShape(), x, y, waitForConfirm);
         action.doAction(this);
@@ -256,8 +262,6 @@ public class GomokuGame {
         else if (turn == playerTwo)
             setTurn(playerThree);
         else if (turn == playerThree)
-            setTurn(playerFour);
-        else if (turn == playerFour)
             setTurn(playerOne);
     }
 
